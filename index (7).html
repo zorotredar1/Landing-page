@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#07110d" />
+  <title>Zoro Trader — Quotex Trading Channel</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #050b08;
+      --green: #25e89b;
+      --green2: #55ffbd;
+      --cyan: #39dfff;
+      --text: #f4f7f5;
+      --muted: #b9c5c0;
+      --glass: rgba(13, 28, 22, .70);
+      --line: rgba(111, 255, 194, .18);
+    }
+    html, body { min-height: 100%; }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 50% 8%, rgba(36, 232, 155, .22), transparent 28%),
+        radial-gradient(circle at 85% 16%, rgba(57, 223, 255, .10), transparent 20%),
+        linear-gradient(145deg, #030705, #07130e 48%, #020604);
+      overflow-x: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .25;
+      background-image:
+        radial-gradient(circle, rgba(255,255,255,.35) 0 1px, transparent 1.5px);
+      background-size: 145px 145px;
+      background-position: 30px 20px;
+      mask-image: linear-gradient(to bottom, black, transparent 78%);
+    }
+    .wrap {
+      width: min(100% - 28px, 980px);
+      margin: auto;
+      padding: 28px 0 38px;
+      text-align: center;
+    }
+    .brand {
+      font-size: clamp(48px, 10vw, 105px);
+      line-height: .95;
+      font-weight: 900;
+      letter-spacing: -4px;
+      background: linear-gradient(90deg, #32f3a8, #5bf8c2 46%, #3bd8ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 0 18px rgba(45, 239, 169, .30));
+    }
+    .channel {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin: 22px auto 34px;
+      padding: 14px 28px;
+      border: 1px solid rgba(74, 255, 183, .35);
+      border-radius: 999px;
+      background: rgba(24, 92, 66, .30);
+      box-shadow: 0 0 24px rgba(38, 239, 161, .18), inset 0 0 20px rgba(80, 255, 194, .06);
+      color: #c9ffea;
+      font-size: clamp(18px, 3vw, 27px);
+      font-weight: 800;
+    }
+    .dot {
+      width: 16px; height: 16px; border-radius: 50%;
+      background: #48f4ae;
+      box-shadow: 0 0 15px #48f4ae;
+      flex: 0 0 auto;
+    }
+    .card {
+      position: relative;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: clamp(35px, 6vw, 75px) clamp(22px, 6vw, 70px);
+      border: 1px solid var(--line);
+      border-radius: 32px;
+      background: linear-gradient(145deg, rgba(22,35,29,.78), rgba(7,18,13,.67));
+      box-shadow:
+        0 0 45px rgba(48, 240, 166, .10),
+        inset 0 0 50px rgba(255,255,255,.025);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      pointer-events: none;
+      box-shadow: inset 0 0 40px rgba(73, 255, 185, .035);
+    }
+    .intro {
+      max-width: 760px;
+      margin: auto;
+      color: #f0f2f0;
+      font-size: clamp(22px, 3.3vw, 39px);
+      line-height: 1.58;
+      font-weight: 700;
+      text-shadow: 0 2px 12px rgba(255,255,255,.12);
+    }
+    .intro .accent { color: #31ed9f; }
+    .mini-telegram {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: min(100%, 560px);
+      margin: 36px auto 0;
+      padding: 15px 24px;
+      border: 1px solid rgba(65, 245, 171, .28);
+      border-radius: 16px;
+      text-decoration: none;
+      color: #dffff0;
+      background: rgba(22, 116, 80, .28);
+      box-shadow: 0 0 24px rgba(35, 235, 158, .16), inset 0 0 18px rgba(80, 255, 191, .04);
+      font-size: 20px;
+      font-weight: 900;
+      transition: transform .2s ease, filter .2s ease, box-shadow .2s ease;
+    }
+    .mini-telegram:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.08);
+      box-shadow: 0 0 34px rgba(35, 235, 158, .28), inset 0 0 18px rgba(80, 255, 191, .06);
+    }
+    .mini-telegram-icon {
+      width: 25px;
+      height: 25px;
+      fill: currentColor;
+    }
+
+    .features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 18px;
+      margin: 45px auto 0;
+    }
+    .feature {
+      min-width: 250px;
+      flex: 1 1 250px;
+      max-width: 330px;
+      padding: 17px 20px;
+      border: 1px solid rgba(64, 240, 166, .14);
+      border-radius: 18px;
+      background: rgba(28, 100, 71, .26);
+      color: #b8ffd9;
+      font-size: 20px;
+      font-weight: 800;
+      box-shadow: 0 0 22px rgba(43, 239, 165, .10), inset 0 0 18px rgba(82, 255, 191, .04);
+    }
+    .feature span { font-size: 25px; margin-right: 10px; }
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      width: min(100%, 690px);
+      margin: 48px auto 0;
+      padding: 23px 30px;
+      border: 0;
+      border-radius: 22px;
+      text-decoration: none;
+      color: white;
+      font-size: clamp(22px, 3.5vw, 34px);
+      font-weight: 900;
+      background: linear-gradient(135deg, #16c986, #29e8a3 52%, #28d9aa);
+      box-shadow: 0 0 35px rgba(34, 235, 158, .35), inset 0 1px 0 rgba(255,255,255,.24);
+      transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+    }
+    .cta:hover {
+      transform: translateY(-3px);
+      filter: brightness(1.06);
+      box-shadow: 0 0 48px rgba(34, 235, 158, .48), inset 0 1px 0 rgba(255,255,255,.28);
+    }
+    .cta:active { transform: translateY(0); }
+    .telegram {
+      width: 32px; height: 32px;
+      fill: currentColor;
+      flex: 0 0 auto;
+    }
+    .fine {
+      margin-top: 28px;
+      color: #aab9b3;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: .3px;
+    }
+    .redirect {
+      margin-top: 16px;
+      color: #2cf1a3;
+      font-weight: 800;
+      font-size: 17px;
+      text-shadow: 0 0 12px rgba(44,241,163,.35);
+    }
+    @media (max-width: 620px) {
+      .wrap { padding-top: 20px; }
+      .brand { letter-spacing: -2px; }
+      .channel { margin-top: 18px; margin-bottom: 22px; padding: 11px 18px; }
+      .card { border-radius: 25px; padding: 31px 17px 34px; }
+      .intro { line-height: 1.45; }
+      .mini-telegram { margin-top: 25px; padding: 14px 18px; font-size: 18px; }
+      .features { margin-top: 22px; gap: 12px; }
+      .feature { min-width: 0; width: 100%; max-width: none; padding: 15px; font-size: 18px; }
+      .cta { margin-top: 32px; padding: 20px 18px; border-radius: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1 class="brand">Zoro Trader</h1>
+
+    <div class="channel">
+      <span class="dot"></span>
+      <span>Quotex Trading Channel</span>
+    </div>
+
+    <section class="card">
+      <p class="intro">
+        Join <span class="accent">Zoro Trader</span> — the ultimate
+        community for Quotex traders. Get real-time signals, expert
+        strategies, and market insights that cut through the noise like a
+        true swordsman.
+      </p>
+
+      <a class="mini-telegram" href="https://t.me/+ZUsOcTFUao4xM2E1" target="_blank" rel="noopener noreferrer">
+        <svg class="mini-telegram-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21.6 3.2 2.9 10.4c-1.28.5-1.27 1.2-.23 1.51l4.8 1.5 1.85 5.7c.23.64.12.9.78.9.51 0 .73-.23.99-1l1.19-1.13 4.95-3.65 5.15 3.82c.95.53 1.64.28 1.88-.88l3.28-15.48c.35-1.4-.53-2.03-1.58-1.5ZM8.2 13.05l10.98-6.93c.55-.34 1.05-.16.64.2l-8.95 8.08-.35 3.76-2.32-5.11Z"/>
+        </svg>
+        Join Telegram Channel
+      </a>
+
+      <div class="features">
+        <div class="feature"><span>📈</span>Live Signals</div>
+        <div class="feature"><span>⚔️</span>Pro Strategies</div>
+        <div class="feature"><span>💬</span>24/7 Community</div>
+      </div>
+    </section>
+
+    <a class="cta" href="https://t.me/+ZUsOcTFUao4xM2E1" target="_blank" rel="noopener noreferrer">
+      <svg class="telegram" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M21.6 3.2 2.9 10.4c-1.28.5-1.27 1.2-.23 1.51l4.8 1.5 1.85 5.7c.23.64.12.9.78.9.51 0 .73-.23 1-.99-1.37l-1.19-1.13 4.95-3.65 5.15 3.82c.95.53 1.64.28 1.88-.88l3.28-15.48c.35-1.4-.53-2.03-1.58-1.5ZM8.2 13.05l10.98-6.93c.55-.34 1.05-.16.64.2l-8.95 8.08-.35 3.76-2.32-5.11Z"/>
+      </svg>
+      Join Channel Now
+    </a>
+
+    <p class="fine">Free to join • Instant access • No spam</p>
+    <p class="redirect" id="redirectText">Tap the button above to join on Telegram.</p>
+  </main>
+
+  <script>
+    // Optional auto-redirect: set to true if you want the page to redirect
+    // automatically after 2 seconds.
+    const AUTO_REDIRECT = false;
+    const TELEGRAM_URL = "https://t.me/+ZUsOcTFUao4xM2E1";
+
+    if (AUTO_REDIRECT) {
+      let seconds = 2;
+      const el = document.getElementById("redirectText");
+      el.textContent = `Redirecting in ${seconds} seconds...`;
+      const timer = setInterval(() => {
+        seconds--;
+        if (seconds <= 0) {
+          clearInterval(timer);
+          window.location.href = TELEGRAM_URL;
+        } else {
+          el.textContent = `Redirecting in ${seconds} seconds...`;
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
