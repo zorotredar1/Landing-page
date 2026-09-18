@@ -1,4 +1,10 @@
-<!DOCTYPE html>
+from pathlib import Path
+import zipfile
+
+out = Path("/mnt/data/zoro-trader-landing")
+out.mkdir(exist_ok=True)
+
+html = r'''<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -108,35 +114,6 @@
       text-shadow: 0 2px 12px rgba(255,255,255,.12);
     }
     .intro .accent { color: #31ed9f; }
-    .mini-telegram {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      width: min(100%, 560px);
-      margin: 36px auto 0;
-      padding: 15px 24px;
-      border: 1px solid rgba(65, 245, 171, .28);
-      border-radius: 16px;
-      text-decoration: none;
-      color: #dffff0;
-      background: rgba(22, 116, 80, .28);
-      box-shadow: 0 0 24px rgba(35, 235, 158, .16), inset 0 0 18px rgba(80, 255, 191, .04);
-      font-size: 20px;
-      font-weight: 900;
-      transition: transform .2s ease, filter .2s ease, box-shadow .2s ease;
-    }
-    .mini-telegram:hover {
-      transform: translateY(-2px);
-      filter: brightness(1.08);
-      box-shadow: 0 0 34px rgba(35, 235, 158, .28), inset 0 0 18px rgba(80, 255, 191, .06);
-    }
-    .mini-telegram-icon {
-      width: 25px;
-      height: 25px;
-      fill: currentColor;
-    }
-
     .features {
       display: flex;
       flex-wrap: wrap;
@@ -207,13 +184,12 @@
       .channel { margin-top: 18px; margin-bottom: 22px; padding: 11px 18px; }
       .card { border-radius: 25px; padding: 31px 17px 34px; }
       .intro { line-height: 1.45; }
-      .mini-telegram { margin-top: 25px; padding: 14px 18px; font-size: 18px; }
-      .features { margin-top: 22px; gap: 12px; }
+      .features { margin-top: 30px; gap: 12px; }
       .feature { min-width: 0; width: 100%; max-width: none; padding: 15px; font-size: 18px; }
       .cta { margin-top: 32px; padding: 20px 18px; border-radius: 18px; }
     }
   </style>
-<!-- Meta Pixel Code -->
+  <!-- Meta Pixel Code -->
 <script>
 !function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -247,13 +223,6 @@ src="https://www.facebook.com/tr?id=1394399705993401&ev=PageView&noscript=1"
         strategies, and market insights that cut through the noise like a
         true swordsman.
       </p>
-
-      <a class="mini-telegram" href="https://t.me/+ZUsOcTFUao4xM2E1" target="_blank" rel="noopener noreferrer">
-        <svg class="mini-telegram-icon" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M21.6 3.2 2.9 10.4c-1.28.5-1.27 1.2-.23 1.51l4.8 1.5 1.85 5.7c.23.64.12.9.78.9.51 0 .73-.23.99-1l1.19-1.13 4.95-3.65 5.15 3.82c.95.53 1.64.28 1.88-.88l3.28-15.48c.35-1.4-.53-2.03-1.58-1.5ZM8.2 13.05l10.98-6.93c.55-.34 1.05-.16.64.2l-8.95 8.08-.35 3.76-2.32-5.11Z"/>
-        </svg>
-        Join Telegram Channel
-      </a>
 
       <div class="features">
         <div class="feature"><span>📈</span>Live Signals</div>
@@ -296,3 +265,28 @@ src="https://www.facebook.com/tr?id=1394399705993401&ev=PageView&noscript=1"
   </script>
 </body>
 </html>
+'''
+
+(out / "index.html").write_text(html, encoding="utf-8")
+
+readme = """# Zoro Trader GitHub Pages Landing Page
+
+1. Upload `index.html` to a GitHub repository.
+2. Open **Settings → Pages**.
+3. Select **Deploy from a branch**, choose `main` and `/ (root)`, then Save.
+4. GitHub will publish the landing page.
+
+Telegram button:
+https://t.me/+ZUsOcTFUao4xM2E1
+
+The page is responsive and uses CSS effects to recreate the neon/glass look from the supplied reference image.
+"""
+(out / "README.md").write_text(readme, encoding="utf-8")
+
+zip_path = Path("/mnt/data/zoro-trader-github-pages.zip")
+with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as z:
+    for f in out.iterdir():
+        z.write(f, f.name)
+
+print(f"Created: {out/'index.html'}")
+print(f"Created: {zip_path}")
